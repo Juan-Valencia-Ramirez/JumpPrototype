@@ -26,14 +26,11 @@ public class HorizonBlockMov : MonoBehaviour
         pendingTurnTime = turnTime;
         direction = 1;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-     
-        transform.position = transform.position + (speed * direction * Time.deltaTime);
+        transform.position += speed * direction * Time.deltaTime;
         pendingTurnTime -= Time.deltaTime;
-
+        
         if (pendingTurnTime <= 0)
         {
             if (direction == -1)
@@ -43,15 +40,30 @@ public class HorizonBlockMov : MonoBehaviour
             direction *= -1;
             pendingTurnTime = turnTime;
         }
-        
     }
-    
     private void OnDrawGizmos()
     {
         Vector3 position = startPosition == Vector3.zero ? transform.position : startPosition;
         Gizmos.color = Color.green;
         turnTime = movementLength / Vector3.Magnitude(speed);
-        Gizmos.DrawLine(position, position + (speed * turnTime));
-        
+        Gizmos.DrawLine(position, position + (speed * turnTime));   
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //if (collision.CompareTag)
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            collision.collider.transform.SetParent(transform);
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            collision.collider.transform.SetParent(null);
+        }
     }
 }
