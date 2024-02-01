@@ -17,10 +17,11 @@ public class HorizonBlockMov : MonoBehaviour
     private float pendingTurnTime;
     [SerializeField]
     private int direction;
-
+    private Rigidbody2D body;
     // Start is called before the first frame update
     void Start()
     {
+        body = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
         turnTime = movementLength / Vector3.Magnitude(speed);
         pendingTurnTime = turnTime;
@@ -28,7 +29,9 @@ public class HorizonBlockMov : MonoBehaviour
     }
     private void Update()
     {
-        transform.position += speed * direction * Time.deltaTime;
+
+        //transform.position += speed * direction * Time.deltaTime;
+        body.velocity = speed * direction;
         pendingTurnTime -= Time.deltaTime;
         
         if (pendingTurnTime <= 0)
@@ -56,14 +59,14 @@ public class HorizonBlockMov : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            collision.collider.transform.SetParent(transform);
+            //collision.collider.transform.SetParent(transform);
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
-            collision.collider.transform.SetParent(null);
+            //collision.collider.transform.SetParent(null);
         }
     }
 }
