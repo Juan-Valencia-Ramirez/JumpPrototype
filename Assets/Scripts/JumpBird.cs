@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class JumpBird : MonoBehaviour
@@ -10,7 +9,12 @@ public class JumpBird : MonoBehaviour
     private float jumpStrength;
     [SerializeField]
     private float horizontalJumpStrength;
-
+    [SerializeField]
+    private float distToGroundCheck;
+    [SerializeField]
+    private Transform checkpoint1;
+    [SerializeField]
+    private Transform checkpoint2;
 
     private void Awake()
     {
@@ -27,7 +31,9 @@ public class JumpBird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (body.velocity.y == 0)
+        RaycastHit2D[] hits1 = Physics2D.RaycastAll(checkpoint1.position, -Vector3.up, distToGroundCheck);
+        RaycastHit2D[] hits2 = Physics2D.RaycastAll(checkpoint2.position, -Vector3.up, distToGroundCheck);
+        if (hits1.Any(h => !h.collider.CompareTag("Player")) || hits2.Any(h => !h.collider.CompareTag("Player")))
         {
             if (Input.GetKeyDown(KeyCode.W))
 
@@ -39,14 +45,15 @@ public class JumpBird : MonoBehaviour
 
             {
                 body.velocity = new Vector2(horizontalJumpStrength, jumpStrength);
+                transform.localScale = Vector3.one;
             }
 
             if (Input.GetKeyDown(KeyCode.A))
 
             {
                 body.velocity = new Vector2(-horizontalJumpStrength, jumpStrength);
+                transform.localScale = new Vector3(-1, 1, 1);
             }
-
         }
     }
 
