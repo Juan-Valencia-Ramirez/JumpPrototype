@@ -15,21 +15,16 @@ public class BlockJumpable : MonoBehaviour
         body = GetComponent<BoxCollider2D>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        characterBase = LevelManager.Instance.MainCharacter.BasePosition;
-    }
-
-    // Update is called once per frame
     void Update()
     {
         body.enabled = characterBase.position.y > blockBase.position.y;
-        //Debug.Log(characterBase.position.y);
-
-        //if (body.enabled)
-        //{
-        //    Debug.Break();
-        //}
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (body != null && body.enabled)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position, 0.1f);
+        }
     }
 }
